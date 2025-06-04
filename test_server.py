@@ -38,27 +38,39 @@ def get_cloud_prediction(image_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    # Load image directly
+    parser.add_argument("image_path", nargs="?")
+    # Load test case from document
     parser.add_argument("-f", "--file", type=str)
     args = parser.parse_args()
 
-    print(f"Loading custom test cases from {args.file}:")
-    print("Test result from local model: ")
-    test_cases = load_test_cases(args.file)
+    if args.image_path:
+        result = get_cloud_prediction(args.image_path)
+        predicted_label = result.get("predicted_label")
+        print(f"Predicted Label: {predicted_label}")
 
-    print("Test result from cloud model: ")
-    for i, (image_path, image_label) in enumerate(test_cases):
-        try:
-            result = get_cloud_prediction(image_path)
-            # Parse predicted label from result
-            # print(result)
-            predicted_label = result.get("predicted_label")
-            if predicted_label == image_label:
-                print(f"Test case {i} passed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
-            else: 
-                print(f"Test case {i} failed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
+    elif args.file:
+        print(f"Loading custom test cases from {args.file}:")
+        print("Test result from local model: ")
+        test_cases = load_test_cases(args.file)
 
-        except FileNotFoundError as fe:
-            print(f"Test case {i} failed => Invalid Image Path: {image_path}")
+        print("Test result from cloud model: ")
+        for i, (image_path, image_label) in enumerate(test_cases):
+            try:
+                result = get_cloud_prediction(image_path)
+                # Parse predicted label from result
+                # print(result)
+                predicted_label = result.get("predicted_label")
+                if predicted_label == image_label:
+                    print(f"Test case {i} passed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
+                else: 
+                    print(f"Test case {i} failed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
 
-        except Exception as e:
-            print(f"Test case {i} failed => Unknown Error.")
+            except FileNotFoundError as fe:
+                print(f"Test case {i} failed => Invalid Image Path: {image_path}")
+
+            except Exception as e:
+                print(f"Test case {i} failed => Unknown Error.")
+
+    else:
+        print("Please provide either an image path or a test file with -f.")
