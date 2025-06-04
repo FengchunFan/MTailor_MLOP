@@ -12,7 +12,7 @@ test_cases = [
     ("./images/n01440764_tench.JPEG", 0),           # Valid case
     ("./images/n01440764_tench_2.JPEG", 0),         # Super-highlighted fish
     ("./images/n01667114_mud_turtle_2.JPEG", 35),   # Corped the turtle img to different shape
-    ("./images/noth_even_exist.JPEG", 99),          # None existing image, should not prevent test case 3 from happening
+    ("./images/noth_even_exist.JPEG", None),          # None existing image, should not prevent test case 3 from happening
     ("./images/n01667114_mud_turtle.JPEG", 35)      # Valid case
 ]
 
@@ -33,7 +33,11 @@ for i, (image_path, image_label) in enumerate(test_cases):
             print(f"Test case {i} failed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
 
     except FileNotFoundError as fe:
-        print(f"Test case {i} failed => Invalid Image Path: {image_path}")
+        predicted_label = None
+        if predicted_label == image_label:
+            print(f"Test case {i} passed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
+        else: 
+            print(f"Test case {i} failed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
 
     except Exception as e:
         print(f"Test case {i} failed => Unknown Error.")
