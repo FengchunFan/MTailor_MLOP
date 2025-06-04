@@ -2,21 +2,44 @@
 #   Onnx Model loading and prediction call
 #   Pre-processing of the Image [Sample code provided in pytorch_model.py]
 
-# Reference: 
-import onnx
+# Reference: https://docs.pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html
 
-class Preprecessor:
+import onnxruntime
+from torchvision import transforms
+import numpy as np
+from PIL import Image
+
+# Reference to Preprocess function in Classifier class in pytorch_model 
+# Convert img to numpy array to ONNX Model
+class Preprocessor:
     def __init__(self):
-        pass
+        self.resize = transforms.Resize((224, 224))   #must same as here
+        self.crop = transforms.CenterCrop((224, 224))
+        self.to_tensor = transforms.ToTensor()
+        self.normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+
+    def fit(self, image_path: str) -> np.ndarray:
+        img = Image.open(image_path)
+        img = self.resize(img)
+        img = self.crop(img)
+        img = self.to_tensor(img)
+        img = self.normalize(img)
+        img = img.unsqueeze(0)
+        return img.numpy()
 
 class ONNX_Model:
-    # Load Onnx model
+    # Run the model with ONNX Runtime
     def __init__(self):
-        self.onnx_model = onnx.load("mtailor.onnx")
-        onnx.checker.check_model(self.onnx_model)
+        # Create an inference session for the model 
+        self.ort_session = onnxruntime.InferenceSession("mtailor_onnx.onnx", providers=["CPUExecutionProvider"])
 
-    # Input an pre-processed image
+    # Input an pre-processed image (numpy array)
     # Output a class label
-    def predict(self) -> int:
-        
+    def predict(self, input_array: np.ndarray) -> int:
+        # Maps 'input': input_array
+        ort_inputs = {self.ort_session.get_inputs()[0].name: input_array}
+        # List of possibility for all classes
+        ort_outs = self.ort_session.run(None, ort_inputs)
+        # Give label to the index class with highest probability
+        label = int(np.argmax(ort_outs[0]))
         return label
