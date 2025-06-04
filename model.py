@@ -20,9 +20,9 @@ class Preprocessor:
         self.normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 
     def fit(self, image_path: str) -> np.ndarray:
-        # Check if file exists
+        # Check if file exists, output will be in runner code
         if not os.path.isfile(image_path):
-            raise FileNotFoundError(f"Invalid Image Path: {image_path}")
+            raise FileNotFoundError
         img = Image.open(image_path)
         img = self.resize(img)
         img = self.crop(img)
