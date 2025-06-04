@@ -9,7 +9,8 @@ from model import Preprocessor, ONNX_Model
 # Format: (image_path, image_label)
 test_cases = [
     ("./images/n01440764_tench.JPEG", 0),           # Valid case
-    ("./images/n01667114_mud_turtle_2.JPEG", 35),   # Ideally should accept input, corped the turtle img to different shape
+    ("./images/n01440764_tench_2.JPEG", 0),         # Super-highlighted fish
+    ("./images/n01667114_mud_turtle_2.JPEG", 35),   # Corped the turtle img to different shape
     ("./images/noth_even_exist.JPEG", 99),          # None existing image, should not prevent test case 3 from happening
     ("./images/n01667114_mud_turtle.JPEG", 35)      # Valid case
 ]
