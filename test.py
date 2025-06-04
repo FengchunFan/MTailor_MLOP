@@ -2,6 +2,7 @@
 
 # Load the classes we implemented
 from model import Preprocessor, ONNX_Model
+from PIL import Image
 
 # Get list of test cases (imgs)
 # Currently we have two valid ones
@@ -21,12 +22,18 @@ Model = ONNX_Model()
 
 # Run through test_cases
 for i, (image_path, image_label) in enumerate(test_cases):
-    try:
-        inp = Preproc.fit(image_path)
+    # Check if file exists, output will be in runner code
+    try: 
+        img = Image.open(image_path)
+        inp = Preproc.fit(img)
         predicted_label = Model.predict(inp)
         if predicted_label == image_label:
             print(f"Test case {i} passed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
         else: 
             print(f"Test case {i} failed => Predicted Label: {predicted_label}, Expected Label: {image_label}")
-    except FileNotFoundError:
+
+    except FileNotFoundError as fe:
         print(f"Test case {i} failed => Invalid Image Path: {image_path}")
+
+    except Exception as e:
+        print(f"Test case {i} failed => Unknown Error.")

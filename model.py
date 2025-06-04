@@ -8,10 +8,10 @@ import onnxruntime
 from torchvision import transforms
 import numpy as np
 from PIL import Image
-import os
 
 # Reference to Preprocess function in Classifier class in pytorch_model 
 # Convert img to numpy array to ONNX Model
+# Input should be img not path
 class Preprocessor:
     def __init__(self):
         self.resize = transforms.Resize((224, 224))   #must same as here
@@ -19,11 +19,8 @@ class Preprocessor:
         self.to_tensor = transforms.ToTensor()
         self.normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 
-    def fit(self, image_path: str) -> np.ndarray:
-        # Check if file exists, output will be in runner code
-        if not os.path.isfile(image_path):
-            raise FileNotFoundError
-        img = Image.open(image_path)
+    # Take in image directly, easier to fit with deployed application design
+    def fit(self, img: Image.Image) -> np.ndarray:
         img = self.resize(img)
         img = self.crop(img)
         img = self.to_tensor(img)
