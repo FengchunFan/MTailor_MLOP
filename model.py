@@ -8,6 +8,7 @@ import onnxruntime
 from torchvision import transforms
 import numpy as np
 from PIL import Image
+import os
 
 # Reference to Preprocess function in Classifier class in pytorch_model 
 # Convert img to numpy array to ONNX Model
@@ -19,6 +20,9 @@ class Preprocessor:
         self.normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 
     def fit(self, image_path: str) -> np.ndarray:
+        # Check if file exists
+        if not os.path.isfile(image_path):
+            raise FileNotFoundError(f"Invalid Image Path: {image_path}")
         img = Image.open(image_path)
         img = self.resize(img)
         img = self.crop(img)
