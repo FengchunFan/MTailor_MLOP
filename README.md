@@ -59,6 +59,16 @@ Model is trained on images with specific pre-processing steps, e.g. you need to 
     - Add more tests to test the Cerebrium as a platform. Anything to monitor the deployed model.
 - Readme File | which has steps to run/use all the deliverables with proper details, such that a person who has no prior information about this repo can understand and run this easily with no blockers.
 
+**How to Run Deliverable**
+- convert_to_onnx.py: python convert_to_onnx.py, you should expect a .onnx file generated afterwards
+- model.py: python model.py, no output for this file
+- test.py: python test.py, output will be test cases showing correctness of model.py
+- Cerebrium deployment: inside cerebrium project, run cerebrium deploy commend
+- Things needed to deploy the code to the Cerebrium
+- test_server.py:
+    - python test_server.py {image_path}, result will be a predicted class label
+    - python test_server.py -f {test_file}, target must be a file having a test_case module, it will inheriht the test cases and run on deployed model
+
 **Evaluation Criteria**
  - *Python* best practices
  - Completeness: Did you include all features?
