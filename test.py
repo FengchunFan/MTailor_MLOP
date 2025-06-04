@@ -12,7 +12,7 @@ test_cases = [
     ("./images/n01440764_tench.JPEG", 0),           # Valid case
     ("./images/n01440764_tench_2.JPEG", 0),         # Super-highlighted fish
     ("./images/n01667114_mud_turtle_2.JPEG", 35),   # Corped the turtle img to different shape
-    ("./images/noth_even_exist.JPEG", None),          # None existing image, should not prevent test case 3 from happening
+    ("./images/noth_even_exist.JPEG", None),        # None existing image, should not prevent test case 3 from happening
     ("./images/n01667114_mud_turtle.JPEG", 35)      # Valid case
 ]
 

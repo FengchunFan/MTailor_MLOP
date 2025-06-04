@@ -5,8 +5,6 @@
 
 import requests
 import argparse
-import importlib.util
-import sys
 
 # Cerebrium endpoint and API key
 URL = "https://api.cortex.cerebrium.ai/v4/p-52b1a8cd/cere-mtailor-mlop/predict"
